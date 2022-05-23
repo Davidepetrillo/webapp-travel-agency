@@ -30,7 +30,8 @@ namespace TravelAgencyWebApp.Controllers.API
             return Ok(trips);
         }
 
-
+        
+        
         
     }
 }

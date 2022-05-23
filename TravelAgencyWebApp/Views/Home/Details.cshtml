@@ -1,0 +1,91 @@
+﻿@model Trip  
+
+<div class="container">
+        <div class="row">
+            <div class="col">
+            <h1 class="col text-center mt-5 fw-bold">Our amazing tours</h1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <blockquote class="col-8 text-center text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ex lacus, ullamcorper id tincidunt in, fermentum finibus orci. Phasalleus placerat aliquet metus scelerisque convallis.</blockquote>
+        </div>
+      </div>
+
+                        <div class="container">
+                            <div class="row">
+                                <div id="details_title" class="col centre row1">@Model.Title</div>
+                            </div>
+                            <div class="row">
+                                <div id="details_description" class="col centre row2">@Model.Description</div>
+                            </div>
+                        </div>
+
+                        <div class="container pic">
+                            <div class="row">
+                                <div id="details_image" class="col"><img src="@Model.Image" alt=""></div>
+                            </div>
+                        </div>
+
+                        <div class="container desc">
+                            <div class="row">
+                                <div id="details_length" class="col profilo name">@Model.Length</div>
+                            </div>
+                            <div class="row">
+                                <div id="details_price" class="col profilo job">@Model.Price</div>
+                            </div>
+                        </div>
+       <!--
+
+        @section Scripts {
+
+        <script type="text/javascript">
+        
+            detailsTrip();
+
+            function detailsTrip(idTrip){
+
+                axios.get('/api/Trips/Get, {
+                    params : {
+                        id : idTrip
+                    }
+                }).then((result) => {
+
+                        document.getElementById("trip_details").innerHTML = 
+                        `
+                         <div class="container">
+                            <div class="row">
+                                <div id="details_title" class="col centre row1">${result.data.title}</div>
+                            </div>
+                            <div class="row">
+                                <div id="details_description" class="col centre row2">${result.data.description}</div>
+                            </div>
+                        </div>
+
+                        <div class="container pic">
+                            <div class="row">
+                                <div id="details_image" class="col"><img src="${result.data.image}" alt=""></div>
+                            </div>
+                        </div>
+
+                        <div class="container desc">
+                            <div class="row">
+                                <div id="details_length" class="col profilo name">${result.data.length}</div>
+                            </div>
+                            <div class="row">
+                                <div id="details_price" class="col profilo job">${result.data.price}</div>
+                            </div>
+                        </div>
+                        `
+                
+                    
+                    }).catch((error) => {
+                        console.log("C'è stato un errore: " + error);
+
+                    });
+               }
+
+        </script>
+
+        }
+
+        -->
