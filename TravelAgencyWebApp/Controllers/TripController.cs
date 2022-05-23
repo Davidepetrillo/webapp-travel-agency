@@ -23,22 +23,29 @@ namespace TravelAgencyWebApp.Controllers
         public IActionResult Details(int id)
         {
 
-            Trip tripFound = null;
 
             using (TripContext database = new TripContext())
             {
-                tripFound = database.Trips
-                    .Where(trip => trip.Id == id).FirstOrDefault();
-            }
-
-                if (tripFound != null)
+                try
                 {
+                    Trip tripFound = database.Trips
+                        .Where(trip => trip.Id == id)
+                        .FirstOrDefault();
+
                     return View("Details", tripFound);
+
                 }
-                else
+                catch (InvalidOperationException ex)
                 {
                     return NotFound($"Il viaggio con l'Id {id} non è stato trovato");
+
+                } catch(Exception ex)
+                {
+                    return BadRequest();
                 }
+
+            }
+                
             
             
         }
