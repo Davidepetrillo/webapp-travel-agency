@@ -16,6 +16,7 @@ namespace TravelAgencyWebApp.Controllers.API
 
             using (TripContext database = new TripContext())
             {
+
                 if (search != null && search != "")
                 {
                     trips = database.Trips.Where(trip => trip.Title.Contains(search) || trip.Description.Contains(search)).ToList<Trip>();

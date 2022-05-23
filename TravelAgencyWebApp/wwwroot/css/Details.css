@@ -1,0 +1,64 @@
+﻿body {
+    margin-top: 25px;
+}
+
+
+header {
+    margin-bottom: 35px;
+}
+
+.centre {
+    text-align: center;
+}
+
+.row1 {
+    font-weight: bold;
+    font-size: xx-large;
+    color: rgb(5, 161, 122);
+    margin-bottom: 1%;
+}
+
+.row2 {
+    font-weight: 600;
+}
+
+.row3 {
+    font-size: small;
+    color: rgb(155, 153, 153);
+    font-weight: 500
+}
+
+
+
+img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.pic {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+
+.profilo {
+    text-align: center;
+}
+
+.title {
+    font-weight: 500;
+    color: rgb(5, 161, 122);
+    font-size: larger;
+}
+
+.lengthPrice {
+    font-weight: 600;
+    color: rgb(128, 127, 127);
+    margin-bottom: 1.5%;
+}
+
+.description {
+    font-weight: 500;
+    margin-bottom: 2%;
+}
