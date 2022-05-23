@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TravelAgencyWebApp.Data;
 using TravelAgencyWebApp.Models;
-using TravelAgencyWebApp.Models.Utils;
 
 namespace TravelAgencyWebApp.Controllers
 {
@@ -9,23 +9,38 @@ namespace TravelAgencyWebApp.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            List<Trip> trips = TripData.GetTrips();
+
+            List<Trip> trips = new List<Trip>();
+
+            using (TripContext database = new TripContext())
+            {
+             trips = database.Trips.ToList<Trip>();
+            }
+
             return View("HomePage", trips);
         }
 
         public IActionResult Details(int id)
         {
-            Trip tripFound = GetTripById(id);
 
-            if (tripFound != null)
+            Trip tripFound = null;
+
+            using (TripContext database = new TripContext())
             {
-                return View("Details", tripFound);
-            }
-            else
-            {
-                return NotFound($"Il viaggio con l'Id {id} non è stato trovato");
+                tripFound = database.Trips
+                    .Where(trip => trip.Id == id).FirstOrDefault();
             }
 
+                if (tripFound != null)
+                {
+                    return View("Details", tripFound);
+                }
+                else
+                {
+                    return NotFound($"Il viaggio con l'Id {id} non è stato trovato");
+                }
+            
+            
         }
 
 
@@ -45,9 +60,12 @@ namespace TravelAgencyWebApp.Controllers
                 return View("FormPost", newTrip);
             }
 
-            Trip newTripWithId = new Trip(TripData.GetTrips().Count, newTrip.Image, newTrip.Title, newTrip.Description, newTrip.Length, newTrip.Price);
-
-            TripData.GetTrips().Add(newTripWithId);
+            using(TripContext database = new TripContext())
+            {
+                Trip newTripToCreate = new Trip(newTrip.Image, newTrip.Title, newTrip.Description, newTrip.Length, newTrip.Price);
+                database.Trips.Add(newTripToCreate);
+                database.SaveChanges();
+            }
 
             return RedirectToAction("Index");
 
@@ -56,7 +74,14 @@ namespace TravelAgencyWebApp.Controllers
         [HttpGet]
         public IActionResult Update(int id)
         {
-            Trip tripToEdit = GetTripById(id);
+
+            Trip tripToEdit = null;
+
+            using (TripContext database = new TripContext())
+            {
+                tripToEdit = database.Trips
+                    .Where(trip => trip.Id == id).FirstOrDefault();
+            }
 
             if (tripToEdit == null)
             {
@@ -79,26 +104,31 @@ namespace TravelAgencyWebApp.Controllers
                 return View("Update", model);
             }
 
-            Trip tripOriginal = GetTripById(id);
+            Trip tripOriginal = null;
 
-            if (tripOriginal != null)
+            using (TripContext database = new TripContext())
             {
-                tripOriginal.Image = model.Image;
-                tripOriginal.Title = model.Title;
-                tripOriginal.Description = model.Description;
-                tripOriginal.Length = model.Length;
-                tripOriginal.Price = model.Price;
+                tripOriginal = database.Trips.Where(trip => trip.Id == id).FirstOrDefault();
 
+                if (tripOriginal != null)
+                {
+                    tripOriginal.Image = model.Image;
+                    tripOriginal.Title = model.Title;
+                    tripOriginal.Description = model.Description;
+                    tripOriginal.Length = model.Length;
+                    tripOriginal.Price = model.Price;
 
+                    database.SaveChanges();
 
-                return RedirectToAction("Index");
+                    return RedirectToAction("Index");
 
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
-            else
-            {
-                return NotFound();
-            }
-
+            
         }
 
 
@@ -106,48 +136,26 @@ namespace TravelAgencyWebApp.Controllers
 
         public IActionResult Delete(int id)
         {
-
-            int TripIndexToRemove = -1;
-
-            List<Trip> tripList = TripData.GetTrips();
-
-            for (int i = 0; i < TripData.GetTrips().Count; i++)
+            using (TripContext database = new TripContext())
             {
+                Trip tripToDelete = database.Trips.Where(trip => trip.Id == id).FirstOrDefault();
 
-                if (tripList[i].Id == id)
+                if (tripToDelete != null)
                 {
-                    TripIndexToRemove = i;
+                    database.Trips.Remove(tripToDelete);
+                    database.SaveChanges();
+
+                    return RedirectToAction("Index");
+
+                } else
+                {
+                    return NotFound();
                 }
-            }
 
-            if (TripIndexToRemove != null)
-            {
-                TripData.GetTrips().RemoveAt(TripIndexToRemove);
-                return RedirectToAction("Index");
             }
-            else
-            {
-                return NotFound();
-            }
-
 
         }
 
-        private Trip GetTripById(int id)
-        {
-
-            Trip tripFound = null;
-
-            foreach (Trip trip in TripData.GetTrips())
-            {
-                if (trip.Id == id)
-                {
-                    tripFound = trip;
-                    break;
-                }
-            }
-
-            return tripFound;
-        }
+           
     }
 }
