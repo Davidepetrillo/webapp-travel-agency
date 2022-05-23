@@ -9,7 +9,11 @@
             <blockquote class="col-8 text-center text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ex lacus, ullamcorper id tincidunt in, fermentum finibus orci. Phasalleus placerat aliquet metus scelerisque convallis.</blockquote>
         </div>
       </div>
-
+      <div class="container mt-3 mb-3">
+            <div class="row">
+                <input id="searchInput" type="text" class="form-control" placeholder="Cerca il viaggio dei tuoi sogni...">
+            </div>
+      </div>
 
     <div class="container my-3">
 
@@ -24,32 +28,45 @@
                 <h3>Al momento non ci sono viaggi disponibili</h3>
             </div>
         </div>
-    </div>
-    <div class="container">
-    <div class="row js_trip_card d-none">            
+    
+        <div id="trip_container" class="row js_trip_card d-none">    
+            
         </div>
-        </div>
-
+     </div>
+    
     
     
     @section Scripts {
 
         <script type="text/javascript">
         
-            loadTrips();
 
-            function loadTrips(){
+            document.getElementById("searchInput").addEventListener('Keyup', searchTrips);
 
-                
-                axios.get('/api/Trips/Get').then((result) => {
+            searchTrips();
 
-                    console.log("Nice");
+
+            function searchTrips(){
+                var inputText = document.getElementById("searchInput").value;
+                loadTrips(inputText);
+            }
+
+            function loadTrips(searchItem){
+
+                document.getElementById("trip_container").innerHTML = "";
+              
+                axios.get('/api/Trips/Get', {
+                    params : {
+                        search : searchItem
+                    }
+                }).then((result) => {
 
                     if(result.data.length == 0){
                         document.querySelector('.js_no_trip').classList.remove('d-none');
                         document.querySelector('.js_wait_trip').classList.add('d-none');
 
                     } else {
+                        document.querySelector('.js_no_trip').classList.add('d-none');
                         document.querySelector('.js_trip_card').classList.remove('d-none');
                         document.querySelector('.js_wait_trip').classList.add('d-none');
                         
@@ -57,14 +74,16 @@
                         result.data.forEach(trip => {
                             document.querySelector('.js_trip_card').innerHTML += 
                             `
-                            <div class="col-xs-12 col-sm-12 col-md-4">                               
-                             <div class="card shadow p-3 mb-5 bg-body rounded px-0 py-0">   
-                                <img src="${trip.image}" class="img-fluid" alt="...">               
-                                <h5 class="card-title text-uppercase text-center bg-warning text-white px-3 py-3">${trip.title}</h5>
-                                <p class="card-text text-center pt-3 pb-4 border-bottom px-4">${trip.description}</p>
-                                <p class="text-center text-warning pb-0 fw-bold px-2">${trip.length}</p>
-                                <p class="text-center pb-3 text-muted"><b class="text-dark">${trip.price}</p>
-                             </div>
+                            <div class="col-xs-12 col-sm-12 col-md-4"> 
+                            
+                                 <div class="card shadow p-3 mb-5 bg-body rounded px-0 py-0">   
+                                        <img src="${trip.image}" class="img-fluid" alt="...">               
+                                        <h5 class="card-title text-uppercase text-center bg-success text-white px-3 py-3">${trip.title}</h5>
+                                        <p class="card-text text-center pt-3 pb-4 border-bottom px-4">${trip.description}</p>
+                                        <p class="text-center text-warning pb-0 fw-bold px-2">${trip.length}</p>
+                                        <p class="text-center pb-3 text-muted">${trip.price}</p>
+                                 </div>
+
                             </div>
                             `
                         });

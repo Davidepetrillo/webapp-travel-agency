@@ -7,14 +7,21 @@ namespace TravelAgencyWebApp.Controllers
     public class TripController : Controller
     {
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(string SearchString)
         {
 
             List<Trip> trips = new List<Trip>();
 
             using (TripContext database = new TripContext())
             {
-             trips = database.Trips.ToList<Trip>();
+                if (SearchString != null)
+                {
+                    trips = database.Trips.Where(trip => trip.Title.Contains(SearchString) || trip.Description.Contains(SearchString)).ToList<Trip>();
+                } else
+                {
+                    trips = database.Trips.ToList<Trip>();
+                }
+                
             }
 
             return View("HomePage", trips);
