@@ -74,21 +74,19 @@
                         result.data.forEach(trip => {
 
                             var idTrip = trip.id;
-                            var urlDetails = "/Home/Details/" + idTrip;
+                            var urlDetails = "Trip/Details/" + idTrip;
                             document.querySelector('.js_trip_card').innerHTML += 
                             `
                             <div class="col-xs-12 col-sm-12 col-md-4"> 
-                            
-                                 <div class="card shadow p-3 mb-5 bg-body rounded px-0 py-0">
-                                 <a href="${urlDetails}">
-                                        <img src="${trip.image}" class="img-fluid" alt="...">
-                                        </a>
+                            <a href="${urlDetails}">
+                                 <div class="card shadow p-3 mb-5 bg-body rounded px-0 py-0">                                
+                                        <img src="${trip.image}" class="img-fluid" alt="...">                                       
                                         <h5 class="card-title text-uppercase text-center bg-success text-white px-3 py-3">${trip.title}</h5>
-                                        <p class="card-text text-center pt-3 pb-4 border-bottom px-4">${trip.description}</p>
+                                        <p class=" desc_trip card-text text-center pt-3 pb-4 border-bottom px-4">${trip.description}</p>
                                         <p class="text-center text-warning pb-0 fw-bold px-2">${trip.length}</p>
                                         <p class="text-center pb-3 text-muted">${trip.price}</p>
                                  </div>
-
+                                 </a>
                             </div>
                             `
                         });

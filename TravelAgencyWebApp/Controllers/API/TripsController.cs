@@ -31,8 +31,35 @@ namespace TravelAgencyWebApp.Controllers.API
             return Ok(trips);
         }
 
+
+        [HttpGet("{id}")]
         
-        
-        
+        public IActionResult Details(int id)
+        {
+            using (TripContext database = new TripContext())
+            {
+                try
+                {
+                    Trip tripFound = database.Trips
+                        .Where(trip => trip.Id == id)
+                        .FirstOrDefault();
+
+                    return Ok(tripFound);
+
+                }
+                catch (InvalidOperationException ex)
+                {
+                    return NotFound($"Il viaggio con l'Id {id} non è stato trovato");
+
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest();
+                }
+            }
+        }
+
+
+
     }
 }

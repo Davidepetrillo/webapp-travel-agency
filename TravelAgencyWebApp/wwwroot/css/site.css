@@ -39,3 +39,11 @@ body {
     margin-bottom: 10px;
 }
 
+a{
+    text-decoration: none;
+    text-decoration-color: unset;
+    colo
+}
+.desc_trip {
+    color: black;
+}
